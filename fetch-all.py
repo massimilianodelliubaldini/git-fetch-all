@@ -1,5 +1,6 @@
 import sys, os, git, struct, glob
-from git import InvalidGitRepositoryError, GitCommandError
+from git.exc import InvalidGitRepositoryError
+from git.exc import GitCommandError
 
 def fetch_all(path):
     try:
@@ -21,7 +22,7 @@ def fetch_all(path):
                     remote.fetch(refspec)
                     
                 except GitCommandError:
-                    return
+                    continue
 
 # From https://stackoverflow.com/a/28952464.
 def resolve_shortcut(file):
@@ -47,12 +48,12 @@ def resolve_shortcut(file):
         position += 0x0C
 
         # go to the LocalBasePath position
-        lbpos = struct.unpack('I', content[position:position+0x04])[0]
+        lbpos = struct.unpack('I', content[position:position + 0x04])[0]
         position = last_pos + lbpos
 
         # read the string at the given position of the determined length
-        size= (length + last_pos) - position - 0x02
-        temp = struct.unpack('c' * size, content[position:position+size])
+        size = (length + last_pos) - position - 0x02
+        temp = struct.unpack('c' * size, content[position:position + size])
         target = ''.join([chr(ord(a)) for a in temp])
 
         return target
