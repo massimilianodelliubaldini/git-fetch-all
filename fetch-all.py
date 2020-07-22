@@ -63,6 +63,6 @@ root = os.path.dirname(os.path.realpath(__file__))
 for directory in os.listdir(root):
     fetch_all(os.path.join(root, directory))
 
-for shortcut in glob.glob('*.lnk'):
+for shortcut in glob.glob(os.path.join(root, '*.lnk')):
     fetch_all(resolve_shortcut(shortcut))
     
